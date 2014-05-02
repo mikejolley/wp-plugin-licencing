@@ -81,7 +81,7 @@ user_id bigint(20) NOT NULL DEFAULT 0,
 activation_email varchar(200) NOT NULL,
 product_id int(20) NOT NULL,
 activation_limit int(20) NOT NULL DEFAULT 0,
-date_created datetime NOT NULL '0000-00-00 00:00:00' NOT NULL,
+date_created datetime NOT NULL '0000-00-00 00:00:00',
 date_expires datetime NULL default null,
 PRIMARY KEY  (licence_key)
 ) $collate;
