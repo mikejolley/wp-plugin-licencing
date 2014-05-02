@@ -20,6 +20,14 @@ class WP_Plugin_Licencing_Post_Types {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 1, 2 );
 		add_action( 'wp_plugin_licencing_save_api_product', array( $this, 'save_api_product_data' ), 20, 2 );
+		add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
+	}
+
+	/**
+	 * Remove meta boxes
+	 */
+	public function remove_meta_boxes() {
+		remove_meta_box( 'slugdiv', 'api_product', 'normal' );
 	}
 
 	/**
@@ -154,6 +162,13 @@ class WP_Plugin_Licencing_Post_Types {
 		global $post;
 
 		return apply_filters( 'wp_plugin_licencing_readme_fields', array(
+			'post_name' => array(
+				'label'       => __( 'API Product ID', 'wp-plugin-licencing' ),
+				'placeholder' => __( 'your-plugin-name', 'wp-plugin-licencing' ),
+				'description' => __( 'A unique identifier for the API Product. Stored as the post_name.', 'wp-plugin-licencing' ),
+				'type'        => 'text',
+				'value'       => $post->post_name
+			),
 			'_version' => array(
 				'label'       => __( 'Version', 'wp-plugin-licencing' ),
 				'placeholder' => __( 'x.x.x', 'wp-plugin-licencing' ),
@@ -396,6 +411,8 @@ class WP_Plugin_Licencing_Post_Types {
 	 * @return void
 	 */
 	public function save_api_product_data( $post_id, $post ) {
+		global $wpdb;
+
 		// Save fields
 		foreach ( $this->readme_fields() as $key => $field ) {
 			// Expirey date
@@ -408,6 +425,10 @@ class WP_Plugin_Licencing_Post_Types {
 			}
 
 			elseif ( 'content' === $key ) {
+				continue;
+			}
+
+			elseif ( 'post_name' === $key ) {
 				continue;
 			}
 
