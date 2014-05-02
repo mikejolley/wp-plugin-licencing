@@ -103,7 +103,7 @@ class WP_Plugin_Licencing_Update_API {
 		}
 		if ( ! $licence || ! is_email( $this->request['email'] ) || $this->request['email'] != $licence->activation_email || ! in_array( $api_product_post_id, wppl_get_licence_api_product_permissions( $licence->product_id ) ) ) {
 
-			$this->trigger_error( 'invalid_key', sprintf( __( 'The licence for <code>%s</code> is invalid or has expired. You can reactivate or purchase a licence key from your <a href="%s" target="_blank">account dashboard</a>.', 'wp-plugin-licencing' ), $this->request['api_product_id'], get_permalink( wc_get_page_id( 'myaccount' ) ) ) );
+			$this->trigger_error( 'invalid_key', sprintf( __( 'The licence for <code>%s</code> is invalid or has expired. To continue to receive support and updates you must obtain an updated licence key. If you have an account, expired keys can be renewed via your <a href="%s" target="_blank">account dashboard</a>.', 'wp-plugin-licencing' ), $this->request['api_product_id'], get_permalink( wc_get_page_id( 'myaccount' ) ) ) );
 		}
 		if ( ! wppl_is_licence_activated( $this->request['licence_key'], $this->request['api_product_id'], $this->request['instance'] ) ) {
 
