@@ -170,3 +170,26 @@ function wppl_get_api_product_post_id( $api_product_id ) {
 	$api_product = get_page_by_path( $api_product_id, 'object', 'api_product' );
 	return isset( $api_product->ID ) ? $api_product->ID : 0;
 }
+
+/**
+ * Check if a logged in user has a package
+ * @return bool
+ */
+function wppl_user_has_active_licence() {
+	global $wpdb;
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	$current_user = get_current_user();
+
+	return $wpdb->get_row( $wpdb->prepare( "
+		SELECT 1 FROM {$wpdb->prefix}wp_plugin_licencing_licences 
+		WHERE activation_email = %d OR user_id = %d
+		AND (
+			date_expires IS NULL
+			OR date_expires > NOW()
+		)
+	", $current_user->email, get_current_user_id() ) ) ? true : false;
+}
