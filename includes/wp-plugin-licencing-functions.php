@@ -186,7 +186,7 @@ function wppl_user_has_active_licence() {
 
 	return $wpdb->get_row( $wpdb->prepare( "
 		SELECT 1 FROM {$wpdb->prefix}wp_plugin_licencing_licences 
-		WHERE activation_email = %d OR user_id = %d
+		WHERE activation_email = %s OR user_id = %d
 		AND (
 			date_expires IS NULL
 			OR date_expires > NOW()
