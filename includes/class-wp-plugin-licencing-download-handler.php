@@ -179,7 +179,7 @@ class WP_Plugin_Licencing_Download_Handler {
         	header( "Content-Length: " . $size );
         }
 
-		if ( ! $remote_file ) {
+		/*if ( ! $remote_file ) {
 			// Path fix - kudos to Jason Judge
          	if ( getcwd() ) {
          		$sendfile_file_path = trim( preg_replace( '`^' . str_replace( '\\', '/', getcwd() ) . '`' , '', $file_path ), '/' );
@@ -197,7 +197,7 @@ class WP_Plugin_Licencing_Download_Handler {
             	header( "X-Accel-Redirect: /$sendfile_file_path" );
             	exit;
             }
-        }
+        }*/
 
         if ( $remote_file ) {
         	$this->readfile_chunked( $file_path ) or header( 'Location: ' . $file_path );
