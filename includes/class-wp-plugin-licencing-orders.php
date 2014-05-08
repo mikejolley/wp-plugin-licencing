@@ -219,14 +219,14 @@ class WP_Plugin_Licencing_Orders {
 	public function my_keys() {
 		global $wpdb;
 
-		$current_user = get_current_user();
+		$current_user = wp_get_current_user();
 
 		$licence_keys = $wpdb->get_results( $wpdb->prepare( "
 			SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_licences
 			WHERE activation_email = %s OR user_id = %d
-		", $current_user->email, get_current_user_id() ) );
+		", $current_user->user_email, get_current_user_id() ) );
 
-		wc_get_template( 'my-api-licences.php', array( 'keys' => $licence_keys ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
+		wc_get_template( 'my-licences.php', array( 'keys' => $licence_keys ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
 	}	
 }
 

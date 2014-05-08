@@ -71,6 +71,7 @@ function wppl_get_licence_from_key( $licence_key ) {
 		WHERE licence_key = %s
 		AND (
 			date_expires IS NULL
+			OR date_expires = '0000-00-00 00:00:00'
 			OR date_expires > NOW()
 		)
 	", $licence_key ) );
@@ -89,6 +90,7 @@ function wppl_get_licences_from_activation_email( $activation_email ) {
 		WHERE activation_email = %s
 		AND (
 			date_expires IS NULL
+			OR date_expires = '0000-00-00 00:00:00'
 			OR date_expires > NOW()
 		)
 	", $activation_email ) );
@@ -182,14 +184,15 @@ function wppl_user_has_active_licence() {
 		return;
 	}
 
-	$current_user = get_current_user();
+	$current_user = wp_get_current_user();
 
 	return $wpdb->get_row( $wpdb->prepare( "
 		SELECT 1 FROM {$wpdb->prefix}wp_plugin_licencing_licences 
 		WHERE activation_email = %s OR user_id = %d
 		AND (
 			date_expires IS NULL
+			OR date_expires = '0000-00-00 00:00:00'
 			OR date_expires > NOW()
 		)
-	", $current_user->email, get_current_user_id() ) ) ? true : false;
+	", $current_user->user_email, get_current_user_id() ) ) ? true : false;
 }
