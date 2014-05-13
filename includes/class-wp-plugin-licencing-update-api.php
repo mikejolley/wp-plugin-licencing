@@ -177,7 +177,7 @@ class WP_Plugin_Licencing_Update_API {
 				$data->sections[ $key ] = Markdown( $data->sections[ $key ] );
 			}	
 
-			set_transient( $transient_name, $data, YEAR_IN_SECONDS );
+			set_transient( $transient_name, $data, DAY_IN_SECONDS );
 		}
 		$this->send_response( $data );
 	}
