@@ -39,22 +39,22 @@ class WP_Plugin_Licencing_Orders {
 	 *
 	 * @return int
 	 */
-	public function save_licence_key( $data ) {
+	public static function save_licence_key( $data ) {
 		global $wpdb;
 
 		$defaults = array(
 			'order_id'         => '',
 			'activation_email' => '',
 			'user_id'          => '',
-			'licence_key'      => $this->generate_licence_key(),
+			'licence_key'      => self::generate_licence_key(),
 			'product_id'       => '',
 			'activation_limit' => '',
 			'date_expires'     => '',
 			'date_created'     => current_time( 'mysql' )
 		);
 
-		$data = wp_parse_args( $data, $defaults  );
-
+		$data = wp_parse_args( $data, $defaults );
+		
 		$insert = array(
 			'order_id'         => $data['order_id'],
 			'activation_email' => $data['activation_email'],
@@ -77,7 +77,7 @@ class WP_Plugin_Licencing_Orders {
 	 * @since 1.0
 	 * @return string the unique ID
 	 */
-	public function generate_licence_key() {
+	public static function generate_licence_key() {
 		return apply_filters( 'wp_plugin_licencing_generate_licence_key', strtoupper( sprintf(
 			'%04x-%04x-%04x-%04x',
 			mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),

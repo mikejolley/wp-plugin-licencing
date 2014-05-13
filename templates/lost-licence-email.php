@@ -11,14 +11,15 @@ _e( "Your licence keys are as follows:", 'wp-plugin-licencing' );
 echo "\n";
 
 foreach ( $keys as $key ) {
-	$api_product = wppl_get_licence_product( $key->product_id );
-
-	echo "\n====================\n";
-	echo esc_html( $api_product->post_title ) . ': ' . wppl_get_package_download_url( $api_product_permission, $key->licence_key, $key->activation_email ) . "\n";
-	echo $key->licence_key . "";
+	if ( $api_product_permissions = wppl_get_licence_api_product_permissions( $key->product_id ) ) {
+		echo "\n====================\n";
+		foreach ( $api_product_permissions as $api_product_permission ) {
+			echo esc_html( get_the_title( $api_product_permission ) ) . ': ' . wppl_get_package_download_url( $api_product_permission, $key->licence_key, $key->activation_email ) . "\n";
+			echo $key->licence_key . "";
+		}
+		echo "\n====================\n\n";
+	}
 }
-
-echo "\n====================\n\n";
 
 _e( "You can input these on the plugins page within your WordPress dashboard.", 'wp-plugin-licencing' );
 echo "\n";

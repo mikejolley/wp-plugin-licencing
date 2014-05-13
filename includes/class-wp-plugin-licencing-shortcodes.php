@@ -83,20 +83,14 @@ class WP_Plugin_Licencing_Shortcodes {
 			if ( ! $keys ) {
 				wc_add_notice( __( 'No licences found.' ), 'error' );
 			} else {
-				//$mailer        = WC()->mailer();
-				//$blogname      = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-				$subject       = __( 'Your product licences', 'wp-plugin-licencing' );
-				$email_heading = __( 'Your product licences', 'wp-plugin-licencing' );
-
-				// Buffer
 				ob_start();
 
-				wc_get_template( 'lost-licence-email.php', array( 'email_heading' => $email_heading, 'keys' => $keys ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
+				wc_get_template( 'lost-licence-email.php', array( 'keys' => $keys ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
 
 				// Get contents
 				$message = ob_get_clean();
 
-				wp_mail( $activation_email, $subject, $message );
+				wp_mail( $activation_email, __( 'Your product licences', 'wp-plugin-licencing' ), $message );
 				wc_add_notice( sprintf( __( 'Your licences have been emailed to %s.' ), $activation_email ), 'success' );
 			}
 		}
