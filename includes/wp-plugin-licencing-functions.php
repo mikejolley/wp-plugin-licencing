@@ -27,7 +27,7 @@ function wppl_get_package_download_url( $api_product_post_id, $licence_key, $act
 		'download_api_product' => $api_product_post_id,
 		'licence_key'          => $licence_key,
 		'activation_email'     => $activation_email
-	), home_url() );
+	), home_url( '/' ) );
 }
 
 /**
