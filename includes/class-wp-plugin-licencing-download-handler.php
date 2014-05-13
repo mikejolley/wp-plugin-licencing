@@ -29,10 +29,7 @@ class WP_Plugin_Licencing_Download_Handler {
 			if ( ! $licence ) {
 				wp_die( __( 'Invalid or expired licence key.', 'wp-plugin-licencing' ) );
 			}
-			if ( $licence->user_id && ! is_user_logged_in() ) {
-				wp_die( __( 'You must be logged into your account to download this file.', 'wp-plugin-licencing' ) . ' <a href="' . esc_url( wp_login_url( wppl_get_package_download_url( $download_api_product, $licence_key, $activation_email ) ) ) . '" class="wc-forward">' . __( 'Login', 'wp-plugin-licencing' ) . '</a>' );
-			}
-			if ( $licence->user_id && $licence->user_id != get_current_user_id() ) {
+			if ( is_user_logged_in() && $licence->user_id && $licence->user_id != get_current_user_id() ) {
 				wp_die( __( 'This licence does not appear to be yours.', 'wp-plugin-licencing' ) );
 			}
 			if ( ! is_email( $activation_email ) || $activation_email != $licence->activation_email ) {
