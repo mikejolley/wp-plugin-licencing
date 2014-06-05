@@ -191,12 +191,19 @@ class WP_Plugin_Licencing_Add_Licence {
 			if ( WP_Plugin_Licencing_Orders::save_licence_key( $data ) ) {
 				ob_start();
 
-				wc_get_template( 'new-licence-email.php', array( 'key' => wppl_get_licence_from_key( $licence_key ) ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
+				// Try to get a user name
+				if ( ! empty( $user ) && ! empty( $user->first_name ) ) {
+					$user_first_name = $user->first_name;
+				} else {
+					$user_first_name = false;
+				}
+
+				wc_get_template( 'new-licence-email.php', array( 'key' => wppl_get_licence_from_key( $licence_key ), 'user_first_name' => $user_first_name ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
 
 				// Get contents
 				$message = ob_get_clean();
 
-				wp_mail( $activation_email, __( 'Your product licence', 'wp-plugin-licencing' ), $message );
+				wp_mail( $activation_email, __( 'Your licence keys for "WP Job Manager"', 'wp-plugin-licencing' ), $message );
 				
 				$admin_message = sprintf( __( 'Licence has been emailed to %s.', 'wp-plugin-licencing' ), $activation_email );
 				echo sprintf( '<div class="updated"><p>%s</p></div>', $admin_message );

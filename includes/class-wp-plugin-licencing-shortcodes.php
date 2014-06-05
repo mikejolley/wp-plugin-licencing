@@ -85,13 +85,24 @@ class WP_Plugin_Licencing_Shortcodes {
 			} else {
 				ob_start();
 
-				wc_get_template( 'lost-licence-email.php', array( 'keys' => $keys ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
+				// Try to get a user name
+				$user = get_user_by( 'email', $activation_email );
+				if ( $user && ! empty( $user->first_name ) ) {
+					$user_first_name = $user->first_name;
+				} else {
+					$user_first_name = false;
+				}
+
+				wc_get_template( 'lost-licence-email.php', array( 'keys' => $keys, 'activation_email' => $activation_email, 'blogname' => get_option( 'blogname' ), 'user_first_name' => $user_first_name ), 'wp-plugin-licencing', WP_PLUGIN_LICENCING_PLUGIN_DIR . '/templates/' );
 
 				// Get contents
 				$message = ob_get_clean();
 
-				wp_mail( $activation_email, __( 'Your product licences', 'wp-plugin-licencing' ), $message );
-				wc_add_notice( sprintf( __( 'Your licences have been emailed to %s.' ), $activation_email ), 'success' );
+				if ( wp_mail( $activation_email, __( 'Your licence keys for WP Job Manager', 'wp-plugin-licencing' ), $message ) ) {
+					wc_add_notice( sprintf( __( 'Your licences have been emailed to %s.' ), $activation_email ), 'success' );
+				} else {
+					wc_add_notice( __( 'Your licences could not be sent. Please contact us for support.' ), 'error' );
+				}
 			}
 		}
 	}
