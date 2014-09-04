@@ -72,7 +72,7 @@ class WP_Plugin_Licencing_Activation_API {
 		header( 'Content-Type: application/json' );
 		die( json_encode( $data ) );
 	}
-	
+
 	/**
 	 * Activate a licence key
 	 */
@@ -90,7 +90,7 @@ class WP_Plugin_Licencing_Activation_API {
 		if ( ! $api_product_post_id ) {
 			$this->trigger_error( '102', __( 'Activation error: Invalid API Product ID.', 'wp-plugin-licencing' ) );
 		}
-		if ( ! is_email( $this->request['email'] ) || $this->request['email'] != $licence->activation_email ) {
+		if ( ! is_email( $this->request['email'] ) || strtolower( $this->request['email'] ) != strtolower( $licence->activation_email ) ) {
 			$this->trigger_error( '103', sprintf( __( 'Activation error: The email provided (%s) is invalid.', 'wp-plugin-licencing' ), $this->request['email'] ) );
 		}
 		if ( ! in_array( $api_product_post_id, wppl_get_licence_api_product_permissions( $licence->product_id ) ) ) {
@@ -106,17 +106,17 @@ class WP_Plugin_Licencing_Activation_API {
 				foreach( $active_instances as $activation ) {
 					if ( $activation->instance == $this->request['instance'] ) {
 						// Reactivate the key
-						$activation_result = $wpdb->update( 
-							"{$wpdb->prefix}wp_plugin_licencing_activations", 
-							array( 
+						$activation_result = $wpdb->update(
+							"{$wpdb->prefix}wp_plugin_licencing_activations",
+							array(
 								'activation_active' => 1,
 								'activation_date'   => current_time( 'mysql' )
-							), 
-							array( 
+							),
+							array(
 								'instance'       => $this->request['instance'],
 								'api_product_id' => $this->request['api_product_id'],
 								'licence_key'    => $this->request['licence_key']
-							) 
+							)
 						);
 						if ( ! $activation_result ) {
 							$this->trigger_error( '106', __( 'Activation error: Could not reactivate licence key.', 'wp-plugin-licencing' ) );
@@ -132,7 +132,7 @@ class WP_Plugin_Licencing_Activation_API {
 			$this->trigger_error( '105', __( 'Activation error: Licence key activation limit reached. Deactivate an install first.', 'wp-plugin-licencing' ) );
 		}
 
-		$instance_exists = false; 
+		$instance_exists = false;
 		$instances       = wppl_get_licence_activations( $this->request['licence_key'], $this->request['api_product_id'] );
 
 		// Check for reactivation
@@ -145,22 +145,22 @@ class WP_Plugin_Licencing_Activation_API {
 		}
 
 		if ( $instance_exists ) {
-			$activation_result = $wpdb->update( 
-				"{$wpdb->prefix}wp_plugin_licencing_activations", 
-				array( 
+			$activation_result = $wpdb->update(
+				"{$wpdb->prefix}wp_plugin_licencing_activations",
+				array(
 					'activation_active' => 1,
 					'activation_date'   => current_time( 'mysql' )
-				), 
-				array( 
+				),
+				array(
 					'instance'       => $this->request['instance'],
 					'api_product_id' => $this->request['api_product_id'],
 					'licence_key'    => $this->request['licence_key']
-				) 
+				)
 			);
 		} else {
-			$activation_result = $wpdb->insert( 
-				"{$wpdb->prefix}wp_plugin_licencing_activations", 
-				array( 
+			$activation_result = $wpdb->insert(
+				"{$wpdb->prefix}wp_plugin_licencing_activations",
+				array(
 					'activation_active' => 1,
 					'activation_date'   => current_time( 'mysql' ),
 					'instance'          => $this->request['instance'],
@@ -174,7 +174,7 @@ class WP_Plugin_Licencing_Activation_API {
 			$this->trigger_error( '107', __( 'Activation error: Could not activate licence key.', 'wp-plugin-licencing' ) );
 		}
 
-		$activations = wppl_get_licence_activations( $this->request['licence_key'], $this->request['api_product_id'] ); 
+		$activations = wppl_get_licence_activations( $this->request['licence_key'], $this->request['api_product_id'] );
 		$response    = array( 'activated' => true );
 
 		if ( $licence->activation_limit ) {
@@ -193,16 +193,16 @@ class WP_Plugin_Licencing_Activation_API {
 
 		$this->check_required( array( 'licence_key', 'api_product_id', 'instance' ) );
 
-		$deactivation_result = $wpdb->update( 
-			"{$wpdb->prefix}wp_plugin_licencing_activations", 
-			array( 
+		$deactivation_result = $wpdb->update(
+			"{$wpdb->prefix}wp_plugin_licencing_activations",
+			array(
 				'activation_active' => 0
-			), 
-			array( 
+			),
+			array(
 				'instance'       => $this->request['instance'],
 				'api_product_id' => $this->request['api_product_id'],
 				'licence_key'    => $this->request['licence_key']
-			) 
+			)
 		);
 
 		$this->send_response( $deactivation_result ? true : false );
