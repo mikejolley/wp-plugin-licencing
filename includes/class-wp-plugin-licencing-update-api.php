@@ -86,7 +86,7 @@ class WP_Plugin_Licencing_Update_API {
 	 * Check access to plugin update API
 	 */
 	public function check_access() {
-		// Check data 
+		// Check data
 		if ( empty( $this->request['licence_key'] ) ) {
 			$this->trigger_error( 'no_key', 'no_key' );
 		}
@@ -101,7 +101,7 @@ class WP_Plugin_Licencing_Update_API {
 		if ( ! $api_product_post_id ) {
 			$this->trigger_error( 'invalid_request', 'invalid_request' );
 		}
-		if ( ! $licence || ! is_email( $this->request['email'] ) || $this->request['email'] != $licence->activation_email || ! in_array( $api_product_post_id, wppl_get_licence_api_product_permissions( $licence->product_id ) ) ) {
+		if ( ! $licence || ! is_email( $this->request['email'] ) || strtolower( $this->request['email'] ) != strtolower( $licence->activation_email ) || ! in_array( $api_product_post_id, wppl_get_licence_api_product_permissions( $licence->product_id ) ) ) {
 
 			$this->trigger_error( 'invalid_key', sprintf( __( 'The licence for <code>%s</code> is invalid or has expired. To continue to receive support and updates you must obtain an updated licence key. If you have an account, expired keys can be renewed via your <a href="%s" target="_blank">account dashboard</a>.', 'wp-plugin-licencing' ), $this->request['api_product_id'], get_permalink( wc_get_page_id( 'myaccount' ) ) ) );
 		}
@@ -147,13 +147,13 @@ class WP_Plugin_Licencing_Update_API {
 			$data->version       = $plugin_version;
 			$data->last_updated  = get_post_meta( $api_product_post_id, '_last_updated', true );
 			$data->download_link = wppl_get_package_download_url( $api_product_post_id, $this->request['licence_key'], $this->request['email'] );
-				
+
 			if ( $author_uri = get_post_meta( $api_product_post_id, '_author_uri', true ) ) {
 				$data->author = '<a href="' . $author_uri . '">' . get_post_meta( $api_product_post_id, '_author', true ) . '</a>';
 			} else {
 				$data->author = get_post_meta( $api_product_post_id, '_author', true );
 			}
-			
+
 			$data->requires      = get_post_meta( $api_product_post_id, '_requires_wp_version', true );
 			$data->tested        = get_post_meta( $api_product_post_id, '_tested_wp_version', true );
 			$data->homepage      = get_post_meta( $api_product_post_id, '_plugin_uri', true );
@@ -175,7 +175,7 @@ class WP_Plugin_Licencing_Update_API {
 				// Markdown transformations
 				$data->sections[ $key ] = preg_replace('/^[\s]*=[\s]+(.+?)[\s]+=/m', '<h4>$1</h4>', $data->sections[ $key ] );
 				$data->sections[ $key ] = Markdown( $data->sections[ $key ] );
-			}	
+			}
 
 			set_transient( $transient_name, $data, DAY_IN_SECONDS );
 		}
