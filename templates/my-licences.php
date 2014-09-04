@@ -22,9 +22,12 @@ if ( sizeof( $keys ) > 0 ) : ?>
 					<td rowspan="<?php echo sizeof( $activations ) + 1; ?>"><?php echo esc_html( $product->post_title ); ?></td> 
 					<td>
 						<code style="display:block;"><?php echo $key->licence_key; ?></code>
-						<?php if ( $key->date_expires ) : ?>
-							<small><?php printf( __( 'Expiry date: %s', 'wp-plugin-licencing' ), date_i18n( get_option( 'date_format' ), strtotime( $key->date_expires ) ) ); ?></small>
-						<?php endif; ?>
+						<small>
+							<?php printf( __( 'Activation email: %s.', 'wp-plugin-licencing' ), $key->activation_email ); ?>
+							<?php if ( $key->date_expires ) : ?>
+								<?php printf( __( 'Expiry date: %s.', 'wp-plugin-licencing' ), date_i18n( get_option( 'date_format' ), strtotime( $key->date_expires ) ) ); ?>
+							<?php endif; ?>
+						</small>
 					</td>
 					<td><?php echo $key->activation_limit ? sprintf( __( '%d per product', 'wp-plugin-licencing' ), absint( $key->activation_limit ) ) : __( 'Unlimited', 'wp-plugin-licencing' ); ?></td>
 					<td><?php
