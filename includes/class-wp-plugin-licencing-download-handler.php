@@ -19,6 +19,8 @@ class WP_Plugin_Licencing_Download_Handler {
 	 * Check if we need to download a file and check validity
 	 */
 	public function download_api_product() {
+		global $wpdb;
+
 		if ( isset( $_GET['download_api_product'] ) && isset( $_GET['licence_key'] ) ) {
 			$download_api_product = absint( $_GET['download_api_product'] );
 			$licence_key          = sanitize_text_field( $_GET['licence_key'] );
@@ -42,6 +44,15 @@ class WP_Plugin_Licencing_Download_Handler {
 			// Get the download URL
 			$file_path = wppl_get_package_file_path( $download_api_product );
 
+			// Log this download
+			$wpdb->insert( $wpdb->prefix . 'wp_plugin_licencing_download_log', array(
+				'licence_key'      => $licence_key,
+				'activation_email' => $activation_email,
+				'api_product_id'   => $download_api_product,
+				'date_downloaded'  => current_time( 'mysql' ),
+				'user_ip_address'  => sanitize_text_field( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'] )
+			) );
+
 			// Download it!
 			$this->download( $file_path );
 		}
@@ -59,7 +70,7 @@ class WP_Plugin_Licencing_Download_Handler {
 
 		$remote_file      = true;
 		$parsed_file_path = parse_url( $file_path );
-		
+
 		$wp_uploads       = wp_upload_dir();
 		$wp_uploads_dir   = $wp_uploads['basedir'];
 		$wp_uploads_url   = $wp_uploads['baseurl'];
@@ -93,7 +104,7 @@ class WP_Plugin_Licencing_Download_Handler {
 			$file_path   = str_replace( site_url( '/', 'http' ), ABSPATH, $file_path );
 
 		} elseif ( file_exists( ABSPATH . $file_path ) ) {
-			
+
 			/** Path needs an abspath to work */
 			$remote_file = false;
 			$file_path   = ABSPATH . $file_path;

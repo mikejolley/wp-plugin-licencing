@@ -55,7 +55,7 @@ class WP_Plugin_Licencing_Shortcodes {
 				wp_die( __( 'Invalid activation email address.', 'wp-plugin-licencing' ) );
 			}
 
-			if ( $wpdb->update( "{$wpdb->prefix}wp_plugin_licencing_activations", array( 'activation_active' => 0 ), array( 
+			if ( $wpdb->update( "{$wpdb->prefix}wp_plugin_licencing_activations", array( 'activation_active' => 0 ), array(
 				'activation_id'    => $activation_id,
 				'licence_key'      => $licence_key
 			) ) ) {

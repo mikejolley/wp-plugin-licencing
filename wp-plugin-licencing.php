@@ -81,8 +81,8 @@ user_id bigint(20) NOT NULL DEFAULT 0,
 activation_email varchar(200) NOT NULL,
 product_id int(20) NOT NULL,
 activation_limit int(20) NOT NULL DEFAULT 0,
-date_created datetime NOT NULL '0000-00-00 00:00:00',
-date_expires datetime NULL default null,
+date_created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+date_expires datetime NULL,
 PRIMARY KEY  (licence_key)
 ) $collate;
 CREATE TABLE ". $wpdb->prefix . "wp_plugin_licencing_activations (
@@ -93,6 +93,15 @@ instance varchar(200) NOT NULL,
 activation_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 activation_active int(1) NOT NULL DEFAULT 1,
 PRIMARY KEY  (activation_id)
+) $collate;
+CREATE TABLE ". $wpdb->prefix . "wp_plugin_licencing_download_log (
+log_id bigint(20) NOT NULL auto_increment,
+date_downloaded datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+licence_key varchar(200) NOT NULL,
+activation_email varchar(200) NOT NULL,
+api_product_id varchar(200) NOT NULL,
+user_ip_address varchar(200) NOT NULL,
+PRIMARY KEY  (log_id)
 ) $collate;
 		";
 

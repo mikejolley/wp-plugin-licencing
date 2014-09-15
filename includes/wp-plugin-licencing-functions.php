@@ -2,7 +2,7 @@
 
 /**
  * Get the product (WC) for a licence. If the licence was purchased for a variation, this will return the parent.
- * @param  int $product_or_variation_id 
+ * @param  int $product_or_variation_id
  * @return post
  */
 function wppl_get_licence_product( $product_or_variation_id ) {
@@ -67,7 +67,7 @@ function wppl_get_licence_from_key( $licence_key ) {
 	global $wpdb;
 
 	return $wpdb->get_row( $wpdb->prepare( "
-		SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_licences 
+		SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_licences
 		WHERE licence_key = %s
 		AND (
 			date_expires IS NULL
@@ -86,7 +86,7 @@ function wppl_get_licences_from_activation_email( $activation_email ) {
 	global $wpdb;
 
 	return $wpdb->get_results( $wpdb->prepare( "
-		SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_licences 
+		SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_licences
 		WHERE activation_email = %s
 		AND (
 			date_expires IS NULL
@@ -95,11 +95,11 @@ function wppl_get_licences_from_activation_email( $activation_email ) {
 		)
 	", $activation_email ) );
 }
-	
+
 /**
  * Get activations for a given key
- * @param  string  $licence_key 
- * @param  int  $api_product_id 
+ * @param  string  $licence_key
+ * @param  int  $api_product_id
  * @param  int|null $active
  * @return object
  */
@@ -121,8 +121,8 @@ function wppl_get_licence_activations( $licence_key, $api_product_id, $active = 
 
 /**
  * Get activations for a given key
- * @param  string  $licence_key 
- * @param  int  $api_product_id 
+ * @param  string  $licence_key
+ * @param  int  $api_product_id
  * @param  int|null $active
  * @return object
  */
@@ -131,7 +131,7 @@ function wppl_is_licence_activated( $licence_key, $api_product_id, $instance ) {
 
 	return $wpdb->get_var( $wpdb->prepare( "
 		SELECT activation_id FROM {$wpdb->prefix}wp_plugin_licencing_activations
-		WHERE licence_key = %s 
+		WHERE licence_key = %s
 		AND api_product_id = %s
 		AND activation_active = 1
 		AND instance = %s
@@ -187,7 +187,7 @@ function wppl_user_has_active_licence() {
 	$current_user = wp_get_current_user();
 
 	return $wpdb->get_row( $wpdb->prepare( "
-		SELECT 1 FROM {$wpdb->prefix}wp_plugin_licencing_licences 
+		SELECT 1 FROM {$wpdb->prefix}wp_plugin_licencing_licences
 		WHERE activation_email = %s OR user_id = %d
 		AND (
 			date_expires IS NULL
