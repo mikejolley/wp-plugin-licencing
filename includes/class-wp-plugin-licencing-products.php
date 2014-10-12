@@ -63,14 +63,14 @@ class WP_Plugin_Licencing_Products {
 	 */
 	public function save_licence_data() {
 		global $post;
-				
+
 		if ( ! empty( $_POST['_is_api_product_licence'] ) ) {
 			update_post_meta( $post->ID, '_is_api_product_licence', 'yes' );
 		} else {
 			update_post_meta( $post->ID, '_is_api_product_licence', 'no' );
 		}
 
-		update_post_meta( $post->ID, '_api_product_permissions', json_encode( array_map( 'absint', (array) $_POST['api_product_permissions'] ) ) );
+		update_post_meta( $post->ID, '_api_product_permissions', json_encode( array_map( 'absint', (array) ( isset( $_POST['api_product_permissions'] ) ? $_POST['api_product_permissions'] : array() ) ) ) );
 		update_post_meta( $post->ID, '_licence_activation_limit', sanitize_text_field( $_POST['_licence_activation_limit'] ) );
 		update_post_meta( $post->ID, '_licence_expiry_days', sanitize_text_field( $_POST['_licence_expiry_days'] ) );
 	}
