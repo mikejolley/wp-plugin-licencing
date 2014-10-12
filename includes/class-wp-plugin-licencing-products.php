@@ -7,16 +7,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WP_Plugin_Licencing_Products class.
  */
 class WP_Plugin_Licencing_Products {
-		
+
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		add_filter( 'product_type_options', array( $this, 'product_type_options' ) );
-		
+
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'licence_data' ) );
 		add_filter( 'woocommerce_process_product_meta', array( $this, 'save_licence_data' ) );
-		
+
 		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'variable_licence_data' ), 10, 3 );
 		add_action( 'woocommerce_save_product_variation', array( $this, 'save_variable_licence_data' ), 10, 2 );
 	}
@@ -25,11 +25,11 @@ class WP_Plugin_Licencing_Products {
 	 * Product type options
 	 */
     public function product_type_options( $options ) {
-	    $options['is_api_product_licence'] = array( 
-			'id'            => '_is_api_product_licence', 
-			'wrapper_class' => 'show_if_simple show_if_variable', 
-			'label'         => __( 'API Product Licence', 'wp-plugin-licencing' ), 
-			'description'   => __( 'Enable this option if this is a licence for an API Product', 'wp-plugin-licencing' ) 
+	    $options['is_api_product_licence'] = array(
+			'id'            => '_is_api_product_licence',
+			'wrapper_class' => 'show_if_simple show_if_variable',
+			'label'         => __( 'API Product Licence', 'wp-plugin-licencing' ),
+			'description'   => __( 'Enable this option if this is a licence for an API Product', 'wp-plugin-licencing' )
 		);
 		return $options;
     }
@@ -47,7 +47,7 @@ class WP_Plugin_Licencing_Products {
 			'post_type'   => 'api_product',
 			'post_status' => array( 'publish' ),
 		) );
-		include( 'views/html-licence-data.php' );	
+		include( 'views/html-licence-data.php' );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class WP_Plugin_Licencing_Products {
 	 */
 	public function variable_licence_data( $loop, $variation_data, $variation ) {
 		global $post, $thepostid;
-		include( 'views/html-variation-licence-data.php' );	
+		include( 'views/html-variation-licence-data.php' );
 	}
 
 	/**
