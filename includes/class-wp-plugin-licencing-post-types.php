@@ -493,6 +493,9 @@ class WP_Plugin_Licencing_Post_Types {
 			}
 		}
 
+		// Get the plugin version
+		$plugin_version = get_post_meta( $post_id, '_version', true );
+
 		delete_transient( 'plugininfo_' . md5( $post->post_name . $plugin_version ) );
 	}
 }
