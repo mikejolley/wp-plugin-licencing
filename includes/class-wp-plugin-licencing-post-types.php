@@ -40,6 +40,7 @@ class WP_Plugin_Licencing_Post_Types {
 		if ( $post->post_type === 'api_product' ) {
 			return __( 'Plugin name', 'wp-plugin-licencing' );
 		}
+
 		return $text;
 	}
 
@@ -47,7 +48,9 @@ class WP_Plugin_Licencing_Post_Types {
 	 * columns function.
 	 *
 	 * @access public
+	 *
 	 * @param mixed $columns
+	 *
 	 * @return void
 	 */
 	public function columns( $columns ) {
@@ -61,7 +64,7 @@ class WP_Plugin_Licencing_Post_Types {
 		$columns["version"]      = __( "Version", 'wp-plugin-licencing' );
 		$columns["last_updated"] = __( "Last updated", 'wp-plugin-licencing' );
 		$columns["package"]      = __( "Package name", 'wp-plugin-licencing' );
-		
+
 		return $columns;
 	}
 
@@ -69,7 +72,9 @@ class WP_Plugin_Licencing_Post_Types {
 	 * custom_columns function.
 	 *
 	 * @access public
+	 *
 	 * @param mixed $column
+	 *
 	 * @return void
 	 */
 	public function custom_columns( $column ) {
@@ -78,16 +83,16 @@ class WP_Plugin_Licencing_Post_Types {
 		switch ( $column ) {
 			case "api_product" :
 				echo '<code>' . $post->post_name . '</code>';
-			break;
+				break;
 			case "version" :
 			case "last_updated" :
 				$data = get_post_meta( $post->ID, '_' . $column, true );
 				echo esc_html( $data );
-			break;
+				break;
 			case "package" :
 				$data = get_post_meta( $post->ID, '_package', true );
 				echo '<code>' . esc_html( basename( $data ) ) . '</code>';
-			break;
+				break;
 		}
 	}
 
@@ -111,7 +116,7 @@ class WP_Plugin_Licencing_Post_Types {
 			return;
 		}
 
-	    /**
+		/**
 		 * Post types
 		 */
 		$singular = __( 'API Product', 'wp-plugin-licencing' );
@@ -119,7 +124,7 @@ class WP_Plugin_Licencing_Post_Types {
 
 		register_post_type( "api_product",
 			apply_filters( "register_post_type_api_product", array(
-				'labels' => array(
+				'labels'              => array(
 					'name'               => $plural,
 					'singular_name'      => $singular,
 					'menu_name'          => $plural,
@@ -162,36 +167,36 @@ class WP_Plugin_Licencing_Post_Types {
 		global $post;
 
 		return apply_filters( 'wp_plugin_licencing_readme_fields', array(
-			'post_name' => array(
+			'post_name'            => array(
 				'label'       => __( 'API Product ID', 'wp-plugin-licencing' ),
 				'placeholder' => __( 'your-plugin-name', 'wp-plugin-licencing' ),
 				'description' => __( 'A unique identifier for the API Product. Stored as the post_name.', 'wp-plugin-licencing' ),
 				'type'        => 'text',
 				'value'       => $post->post_name
 			),
-			'_version' => array(
+			'_version'             => array(
 				'label'       => __( 'Version', 'wp-plugin-licencing' ),
 				'placeholder' => __( 'x.x.x', 'wp-plugin-licencing' ),
 				'description' => __( 'The current version number of the plugin.', 'wp-plugin-licencing' )
 			),
-			'_last_updated' => array(
+			'_last_updated'        => array(
 				'label'       => __( 'Date', 'wp-plugin-licencing' ),
 				'placeholder' => __( 'yyyy-mm-dd', 'wp-plugin-licencing' ),
 				'description' => __( 'The date of the last update.', 'wp-plugin-licencing' )
 			),
-			'_package' => array(
+			'_package'             => array(
 				'label'       => __( 'Package', 'wp-plugin-licencing' ),
 				'type'        => 'file',
 				'description' => __( 'The plugin package zip file.', 'wp-plugin-licencing' )
 			),
-			'_plugin_uri' => array(
+			'_plugin_uri'          => array(
 				'label' => __( 'Plugin URI', 'wp-plugin-licencing' )
 			),
-			'_author' => array(
+			'_author'              => array(
 				'label'       => __( 'Author', 'wp-plugin-licencing' ),
 				'placeholder' => ''
 			),
-			'_author_uri' => array(
+			'_author_uri'          => array(
 				'label'       => __( 'Author URI', 'wp-plugin-licencing' ),
 				'placeholder' => ''
 			),
@@ -199,17 +204,17 @@ class WP_Plugin_Licencing_Post_Types {
 				'label'       => __( 'Requries at least', 'wp-plugin-licencing' ),
 				'placeholder' => __( 'e.g. 3.8', 'wp-plugin-licencing' )
 			),
-			'_tested_wp_version' => array(
+			'_tested_wp_version'   => array(
 				'label'       => __( 'Tested up to', 'wp-plugin-licencing' ),
 				'placeholder' => __( 'e.g. 3.9', 'wp-plugin-licencing' )
 			),
-			'content' => array(
+			'content'              => array(
 				'label'       => __( 'Description', 'wp-plugin-licencing' ),
 				'placeholder' => __( 'Content describing the plugin', 'wp-plugin-licencing' ),
 				'type'        => 'textarea',
 				'value'       => $post->post_content
 			),
-			'_changelog' => array(
+			'_changelog'           => array(
 				'label' => __( 'Changelog', 'wp-plugin-licencing' ),
 				'type'  => 'textarea'
 			)
@@ -334,26 +339,32 @@ class WP_Plugin_Licencing_Post_Types {
 	public function input_select( $key, $field ) {
 		global $thepostid;
 
-		if ( empty( $field['value'] ) )
+		if ( empty( $field['value'] ) ) {
 			$field['value'] = get_post_meta( $thepostid, $key, true );
+		}
 		?>
 		<p class="form-field">
-			<label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ) ; ?>:</label>
+			<label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?>:</label>
 			<select name="<?php echo esc_attr( $key ); ?>" id="<?php echo esc_attr( $key ); ?>">
 				<?php foreach ( $field['options'] as $key => $value ) : ?>
-				<option value="<?php echo esc_attr( $key ); ?>" <?php if ( isset( $field['value'] ) ) selected( $field['value'], $key ); ?>><?php echo esc_html( $value ); ?></option>
+					<option value="<?php echo esc_attr( $key ); ?>" <?php if ( isset( $field['value'] ) ) {
+						selected( $field['value'], $key );
+					} ?>><?php echo esc_html( $value ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<?php if ( ! empty( $field['description'] ) ) : ?><span class="description"><?php echo $field['description']; ?></span><?php endif; ?>
+			<?php if ( ! empty( $field['description'] ) ) : ?>
+				<span class="description"><?php echo $field['description']; ?></span><?php endif; ?>
 		</p>
-		<?php
+	<?php
 	}
 
 	/**
 	 * api_product_data function.
 	 *
 	 * @access public
+	 *
 	 * @param mixed $post
+	 *
 	 * @return void
 	 */
 	public function api_product_data( $post ) {
@@ -386,18 +397,34 @@ class WP_Plugin_Licencing_Post_Types {
 	 * save_post function.
 	 *
 	 * @access public
+	 *
 	 * @param mixed $post_id
 	 * @param mixed $post
+	 *
 	 * @return void
 	 */
 	public function save_post( $post_id, $post ) {
-		if ( empty( $post_id ) || empty( $post ) || empty( $_POST ) ) return;
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return;
-		if ( is_int( wp_is_post_revision( $post ) ) ) return;
-		if ( is_int( wp_is_post_autosave( $post ) ) ) return;
-		if ( empty($_POST['wp_plugin_licencing_nonce']) || ! wp_verify_nonce( $_POST['wp_plugin_licencing_nonce'], 'save_meta_data' ) ) return;
-		if ( ! current_user_can( 'edit_post', $post_id ) ) return;
-		if ( $post->post_type != 'api_product' ) return;
+		if ( empty( $post_id ) || empty( $post ) || empty( $_POST ) ) {
+			return;
+		}
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+		if ( is_int( wp_is_post_revision( $post ) ) ) {
+			return;
+		}
+		if ( is_int( wp_is_post_autosave( $post ) ) ) {
+			return;
+		}
+		if ( empty( $_POST['wp_plugin_licencing_nonce'] ) || ! wp_verify_nonce( $_POST['wp_plugin_licencing_nonce'], 'save_meta_data' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+		if ( $post->post_type != 'api_product' ) {
+			return;
+		}
 
 		do_action( 'wp_plugin_licencing_save_api_product', $post_id, $post );
 	}
@@ -406,8 +433,10 @@ class WP_Plugin_Licencing_Post_Types {
 	 * save_api_product_data function.
 	 *
 	 * @access public
+	 *
 	 * @param mixed $post_id
 	 * @param mixed $post
+	 *
 	 * @return void
 	 */
 	public function save_api_product_data( $post_id, $post ) {
@@ -417,42 +446,36 @@ class WP_Plugin_Licencing_Post_Types {
 		foreach ( $this->readme_fields() as $key => $field ) {
 			// Expirey date
 			if ( '_last_updated' === $key ) {
-				if ( ! empty( $_POST[ $key ] ) ) {
-					update_post_meta( $post_id, $key, date( 'Y-m-d', strtotime( sanitize_text_field( $_POST[ $key ] ) ) ) );
+				if ( ! empty( $_POST[$key] ) ) {
+					update_post_meta( $post_id, $key, date( 'Y-m-d', strtotime( sanitize_text_field( $_POST[$key] ) ) ) );
 				} else {
 					update_post_meta( $post_id, $key, date( 'Y-m-d' ) );
 				}
-			}
-
-			elseif ( 'content' === $key ) {
+			} elseif ( 'content' === $key ) {
 				continue;
-			}
-
-			elseif ( 'post_name' === $key ) {
+			} elseif ( 'post_name' === $key ) {
 				continue;
-			}
-
-			// Everything else
+			} // Everything else
 			else {
 				$type = ! empty( $field['type'] ) ? $field['type'] : '';
 
 				switch ( $type ) {
 					case 'textarea' :
-						update_post_meta( $post_id, $key, wp_kses_post( stripslashes( $_POST[ $key ] ) ) );
-					break;
-					default : 
-						if ( is_array( $_POST[ $key ] ) ) {
-							update_post_meta( $post_id, $key, array_map( 'sanitize_text_field', $_POST[ $key ] ) );
+						update_post_meta( $post_id, $key, wp_kses_post( stripslashes( $_POST[$key] ) ) );
+						break;
+					default :
+						if ( is_array( $_POST[$key] ) ) {
+							update_post_meta( $post_id, $key, array_map( 'sanitize_text_field', $_POST[$key] ) );
 						} else {
-							update_post_meta( $post_id, $key, sanitize_text_field( $_POST[ $key ] ) );
+							update_post_meta( $post_id, $key, sanitize_text_field( $_POST[$key] ) );
 						}
-					break;
+						break;
 				}
 			}
 		}
 
 		delete_transient( 'plugininfo_' . md5( $post->post_name . $plugin_version ) );
-	}	
+	}
 }
 
 new WP_Plugin_Licencing_Post_Types();
