@@ -177,6 +177,7 @@ class WP_Plugin_Licencing_Orders {
 	 * On delete post
 	 */
 	public function delete_post( $id ) {
+		global $wpdb;
 		if ( ! current_user_can( 'delete_posts' ) ) {
 			return;
 		}
