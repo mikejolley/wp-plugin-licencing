@@ -1,25 +1,25 @@
-<?php 
+<?php
 global $wpdb;
 
-if ( sizeof( $keys ) > 0 ) : ?> 
+if ( sizeof( $keys ) > 0 ) : ?>
 
 	<h2><?php _e( 'Licences', 'wp-plugin-licencing' ); ?></h2>
 	<table class="shop_table my_account_orders my_account_api_licence_keys">
 		<thead>
 			<tr>
-				<th><?php _e( 'Product name', 'wp-plugin-licencing' ); ?></th> 
+				<th><?php _e( 'Product name', 'wp-plugin-licencing' ); ?></th>
 				<th><?php _e( 'Licence key', 'wp-plugin-licencing' ); ?></th>
 				<th><?php _e( 'Activation limit', 'wp-plugin-licencing' ); ?></th>
 				<th><?php _e( 'Download/Renew', 'wp-plugin-licencing' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ( $keys as $key ) : 
+			<?php foreach ( $keys as $key ) :
 				$product     = wppl_get_licence_product( $key->product_id );
-				$activations = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_activations WHERE activation_active = 1 AND licence_key=%s;", $key->licence_key ) ); 
+				$activations = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_activations WHERE activation_active = 1 AND licence_key=%s;", $key->licence_key ) );
 				?>
 				<tr>
-					<td rowspan="<?php echo sizeof( $activations ) + 1; ?>"><?php echo esc_html( $product->post_title ); ?></td> 
+					<td rowspan="<?php echo sizeof( $activations ) + 1; ?>"><?php echo esc_html( $product->post_title ); ?></td>
 					<td>
 						<code style="display:block;"><?php echo $key->licence_key; ?></code>
 						<small>
@@ -37,7 +37,7 @@ if ( sizeof( $keys ) > 0 ) : ?>
 							if ( $api_product_permissions = wppl_get_licence_api_product_permissions( $key->product_id ) ) {
 								echo '<ul class="digital-downloads">';
 								foreach ( $api_product_permissions as $api_product_permission ) {
-									echo '<li><a class="download-button" href="' . wppl_get_package_download_url( $api_product_permission, $key->licence_key, $key->activation_email ) . '">' . get_the_title( $api_product_permission ) . '</a></li>';
+									echo '<li><a class="download-button" href="' . wppl_get_package_download_url( $api_product_permission, $key->licence_key, $key->activation_email ) . '">' . get_the_title( $api_product_permission ) . ' (v' . get_post_meta( $api_product_permission, '_version', true ) . ')</a></li>';
 								}
 								echo '</ul>';
 							}
@@ -52,5 +52,5 @@ if ( sizeof( $keys ) > 0 ) : ?>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-	
+
 <?php endif; ?>
