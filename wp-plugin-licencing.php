@@ -3,7 +3,7 @@
 	Plugin Name: WP Plugin Licencing for WooCommerce
 	Plugin URI: http://wpjobmanager.com
 	Description: A simple solution to plugin licencing. Define API Products separately, then sell licences as products in WooCommerce which grant access to api products.
-	Version: 1.0.0
+	Version: 1.0.1
 	Author: Mike Jolley
 	Author URI: http://mikejolley.com
 */
@@ -18,7 +18,7 @@ class WP_Plugin_Licencing {
 	 */
 	public function __construct() {
 		// Define constants
-		define( 'WP_PLUGIN_LICENCING_VERSION', '1.0.0' );
+		define( 'WP_PLUGIN_LICENCING_VERSION', '1.0.1' );
 		define( 'WP_PLUGIN_LICENCING_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'WP_PLUGIN_LICENCING_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 

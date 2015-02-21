@@ -146,7 +146,6 @@ class WP_Plugin_Licencing_Update_API {
 			$data->slug          = $this->request['plugin_name'];
 			$data->version       = $plugin_version;
 			$data->last_updated  = get_post_meta( $api_product_post_id, '_last_updated', true );
-			$data->download_link = wppl_get_package_download_url( $api_product_post_id, $this->request['licence_key'], $this->request['email'] );
 
 			if ( $author_uri = get_post_meta( $api_product_post_id, '_author_uri', true ) ) {
 				$data->author = '<a href="' . $author_uri . '">' . get_post_meta( $api_product_post_id, '_author', true ) . '</a>';
@@ -179,6 +178,11 @@ class WP_Plugin_Licencing_Update_API {
 
 			set_transient( $transient_name, $data, DAY_IN_SECONDS );
 		}
+
+		// Add download link which is unique to the request
+		$data->download_link = wppl_get_package_download_url( $api_product_post_id, $this->request['licence_key'], $this->request['email'] );
+
+		// Send response
 		$this->send_response( $data );
 	}
 }
