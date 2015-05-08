@@ -27,9 +27,9 @@ class WP_Plugin_Licencing_Renewals {
 
 			$licence_key = sanitize_text_field( $_GET['renew_licence'] );
 			$licence     = $wpdb->get_row( $wpdb->prepare( "
-				SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_licences 
+				SELECT * FROM {$wpdb->prefix}wp_plugin_licencing_licences
 				WHERE licence_key = %s
-				AND user_id = %d OR user_id = 0
+				AND ( user_id = %d OR user_id = 0 )
 			", $licence_key, get_current_user_id() ) );
 
 			// Renewable?
@@ -37,6 +37,7 @@ class WP_Plugin_Licencing_Renewals {
 				wc_add_notice( __( 'Invalid licence', 'wp-plugin-licencing' ), 'error' );
 				return;
 			}
+
 			if ( ! $licence->date_expires || strtotime( $licence->date_expires ) > current_time( 'timestamp' ) ) {
 				wc_add_notice( __( 'This licence does not need to be renewed yet', 'wp-plugin-licencing' ), 'notice' );
 				return;
@@ -73,7 +74,7 @@ class WP_Plugin_Licencing_Renewals {
 			$price            = $cart_item['data']->get_price();
 			$discount         = ( $price / 100 ) * apply_filters( 'wp_plugin_licencing_renewal_discount_percent', 30 );
 			$discounted_price = $price - $discount;
-			
+
 			$cart_item['data']->set_price( $discounted_price );
 			$cart_item['data']->get_post_data();
 			$cart_item['data']->post->post_title .= ' (' . __( 'Renewal', 'wp-plugin-licencing' ) . ')';
@@ -89,7 +90,7 @@ class WP_Plugin_Licencing_Renewals {
 			$price            = $cart_item['data']->get_price();
 			$discount         = ( $price / 100 ) * apply_filters( 'wp_plugin_licencing_renewal_discount_percent', 30 );
 			$discounted_price = $price - $discount;
-			
+
 			$cart_item['data']->set_price( $discounted_price );
 			$cart_item['data']->get_post_data();
 			$cart_item['data']->post->post_title .= ' (' . __( 'Renewal', 'wp-plugin-licencing' ) . ')';
@@ -106,7 +107,7 @@ class WP_Plugin_Licencing_Renewals {
 		if ( isset( $values['renewing_key'] ) ) {
 			wc_add_order_item_meta( $item_id, __('_renewing_key', 'wp-plugin-licencing' ), $values['renewing_key'] );
 		}
-	}	
+	}
 }
 
 new WP_Plugin_Licencing_Renewals();
