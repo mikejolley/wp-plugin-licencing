@@ -53,6 +53,7 @@ class WP_Plugin_Licencing_Update_API {
 		switch ( $this->request['request'] ) {
 			case 'pluginupdatecheck' :
 				$response->slug        = '';
+				$response->plugin      = '';
 				$response->new_version = '';
 				$response->url         = '';
 				$response->package     = '';
@@ -60,6 +61,7 @@ class WP_Plugin_Licencing_Update_API {
 			case 'plugininformation' :
 				$response->name          = '';
 				$response->slug          = '';
+				$response->plugin        = '';
 				$response->version       = '';
 				$response->last_updated  = '';
 				$response->download_link = '';
@@ -120,7 +122,8 @@ class WP_Plugin_Licencing_Update_API {
 		$licence             = wppl_get_licence_from_key( $this->request['licence_key'] );
 		$api_product_post_id = wppl_get_api_product_post_id( $this->request['api_product_id'] );
 		$data                = new stdClass();
-		$data->slug          = $this->request['plugin_name'];
+		$data->plugin        = $this->request['plugin_name'];
+		$data->slug          = $this->request['api_product_id'];
 		$data->new_version   = get_post_meta( $api_product_post_id, '_version', true );
 		$data->url           = get_post_meta( $api_product_post_id, '_plugin_uri', true );
 		$data->package       = wppl_get_package_download_url( $api_product_post_id, $this->request['licence_key'], $this->request['email'] );
@@ -143,7 +146,8 @@ class WP_Plugin_Licencing_Update_API {
 			$api_product_post    = get_post( $api_product_post_id );
 			$data                = new stdClass();
 			$data->name          = $api_product_post->post_title;
-			$data->slug          = $this->request['plugin_name'];
+			$data->plugin        = $this->request['plugin_name'];
+			$data->slug          = $this->request['api_product_id'];
 			$data->version       = $plugin_version;
 			$data->last_updated  = get_post_meta( $api_product_post_id, '_last_updated', true );
 
